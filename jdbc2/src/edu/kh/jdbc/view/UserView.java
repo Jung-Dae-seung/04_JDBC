@@ -417,11 +417,6 @@ public class UserView {
 			System.out.println("삽입 실패");
 		}
 		
-		
-		
-		
-		
-		
 	}
 
 
