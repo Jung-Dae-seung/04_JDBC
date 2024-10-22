@@ -17,12 +17,12 @@ public class UserService {
 	private UserDAO dao = new UserDAO();
 
 	/** 전달 받은 아이디와 일치하는 User 정보 반환 서비스
-	 * @param input
-	 * @return
+	 * @param input (입력된 아이디)
+	 * @return 아이디가 일치하는 회원 정보, 없으면 null
 	 */
 	public User selectId(String input) {
 		
-		// 커넥션
+		// 커넥션 생성
 		Connection conn = JDBCTemplate.getConnection();
 		
 		// DAO 메서드 호출 후 결과 반환 받기
@@ -31,24 +31,23 @@ public class UserService {
 		// 다 쓴 커넥션 닫기
 		JDBCTemplate.close(conn);
 		
-		JDBCTemplate.close(conn);
 		
-		return user;
+		return user; // DB 조회 결과 반환
 	}
 
 	/** User 등록 서비스
-	 * @param user : 입력받은 id, pw, name이 세팅된 객체
+	 * @param user : 입력 받은 id,pw,name이 세팅된 객체
 	 * @return 삽입 성공한 결과 행의 개수
 	 */
 	public int insertUser(User user) throws Exception{
 		
 		// 1. 커넥션 생성
-		Connection conn = JDBCTemplate.getConnection();
+		Connection conn = getConnection();
 		
 		// 2. 데이터 가공(할게 없으면 넘어감)
 		
-		// 3. DAO 메서드 호출 후 결과 반환 받기
-		// 결과(삽입 성공한 개수, int) 반환 받기
+		// 3. DAO 메서드 호출(INSERT) 후 
+		// 결과(삽입 성공한 행 개수, int) 반환 받기
 		int result = dao.insertUser(conn, user);
 		
 		// 4. INSERT 수행 결과에 따라 트랜잭션 제어 처리
@@ -68,18 +67,17 @@ public class UserService {
 	}
 
 	/** User 전체 조회 서비스
-	 * @return 조회된 User가 담긴 List 
+	 * @return 조회된 User가 담긴 List
 	 */
-	public List<User> selectAll() throws Exception {
+	public List<User> selectAll() throws Exception{
 		
 		// 1. 커넥션 생성
 		Connection conn = getConnection();
 		
 		// 2. 데이터 가공(없으면 넘어감)
 		
-		// 3. DAO 메서드 호출 후 결과 반환(List<User>)받기
+		// 3. DAO 메서드 호출(SELECT) 후 결과 반환(List<User>)받기
 		List<User> userList = dao.selectAll(conn);
-		
 		
 		// 4. DML 인 경우 트랜잭션 처리
 		//    SELECT 는 안해도 된다!
@@ -91,79 +89,168 @@ public class UserService {
 		return userList;
 	}
 
-	/** User 이름 검색 조회 서비스
-	 * @param input
-	 * @return 조회된 User가 담긴 List 
+	/** 3. User 중 이름에 검색어가 포함된 회원 조회 서비스
+	 * @param keyword : 입력한 키워드
+	 * @return searchList : 조회된 회원 리스트
 	 */
-	public List<User> selectName(String input) throws Exception{
+	public List<User> selectName(String keyword) throws Exception {
 		
+		// 1. 커넥션 생성
 		Connection conn = getConnection();
 		
-		List<User> userList = dao.selectName(conn, input);
+		// 2. 데이터 가공(없으면 패스)
 		
+		// 3. DAO 메서드 호출 후 결과 반환받기
+		List<User> searchList = dao.selectName(conn, keyword);
+		
+		// 4. DML인 경우 트랜잭션 처리(SELECT 패스)
+		
+		// 5. 커넥션 반환
 		close(conn);
 		
-		return userList;
+		// 6. 결과 반환
+		return searchList;
 	}
 
-	/** USER_NO 검색 조회 서비스
-	 * @param userNo
-	 * @return user
+	/** 4. USER_NO를 입력 받아 일치하는 User 조회 서비스
+	 * @param input 입력한 사용자번호
+	 * @return User (조회된 회원 정보 객체 또는 null)
 	 */
-	public User selectUser(int userNo) throws Exception {
-		
+	public User selectUser(int input) throws Exception {
+	
+		// 1. 커넥션 생성
 		Connection conn = getConnection();
 		
-		User user = dao.selectUser(conn, userNo);
+		// 2. dao 호출 결과반환
+		User user = dao.selectUser(conn, input);
 		
+		// 3. 커넥션 반환
 		close(conn);
 		
+		// 4. 결과 반환
 		return user;
 	}
 
 	/** USER_NO를 입력 받아 일치하는 User 삭제 서비스
+	 * @param input
+	 * @return result
+	 */
+	public int deleteUser(int input) throws Exception {
+		
+		Connection conn = getConnection();
+		
+		int result = dao.deleteUser(conn, input);
+		
+		// 결과에 따라 트랜잭션 제어 처리
+		if(result > 0) {
+			commit(conn);
+		} else {
+			rollback(conn);
+		}
+		
+		close(conn);
+		
+		return result;
+	}
+
+	/** ID, PW가 일치하는 회원의 USER_NO 조회
+	 * @param userId
+	 * @param userPw
+	 * @return userNo
+	 */
+	public int selectUserNo(String userId, String userPw) throws Exception{
+		
+		Connection conn = getConnection(); // 커넥션 생성
+		
+		// DAO 호출 후 결과 반환 받기
+		int userNo = dao.selectUser(conn, userId, userPw);
+		
+		close(conn); // 커넥션 반환
+		
+		return userNo; // 결과 반환
+	}
+
+	/** userNo가 일치하는 User의 이름 수정 서비스
+	 * @param userName
 	 * @param userNo
 	 * @return result
+	 * @throws Exception
 	 */
-	public int delteUser(int userNo) throws Exception {
+	public int updateName(String userName, int userNo) throws Exception{
 		
 		Connection conn = getConnection();
 		
-		int result = dao.deleteUser(conn, userNo);
+		int result = dao.updateName(conn, userName, userNo);
+		
+		// 트랜잭션 제어
+		if(result > 0) commit(conn);
+		else		   rollback(conn);
 		
 		close(conn);
 		
 		return result;
 	}
 
-	/** ID, PW를 입력받아 회원 조회 서비스
-	 * @param user
-	 * @return result
+	/** 아이디 중복 확인 서비스
+	 * @param userId
+	 * @return count
 	 */
-	public int selectIdPw(User user) throws Exception {
+	public int idCheck(String userId) throws Exception {
 		
 		Connection conn = getConnection();
 		
-		int result = dao.selectIdPw(conn, user);
+		int count = dao.idCheck(conn, userId);
 		
 		close(conn);
 		
-		return result;
+		return count;
 	}
 
-	/** 입력한 Name으로 해당 회원 이름 수정 서비스
-	 * @param user
-	 * @return result
+	/** userList에 있는 모든 user INSERT 서비스
+	 * @param userList
+	 * @return result : 삽입된 행의 개수
 	 */
-	public int updateName(User user) throws Exception {
+	public int multiInsertUser(List<User> userList) throws Exception{
 		
-		Connection conn = getConnection(); 
-				
-		int result = dao.updateName(conn, user);
+		Connection conn = getConnection();
+		
+		// 다중 INSERT 방법
+		// 1) SQL 을 이용한 다중 INSERT
+		// 2) Java 반복문을 이용한 다중 INSERT (이거 사용!)
+		
+		int count = 0; // 삽입 성공한 행의 개수 count
+		
+		// 1행씩 삽입
+		for(User user : userList) {
+			int result = dao.insertUser(conn, user);
+			count += result; // 삽입 성공한 행의 개수를 count에 누적
+		}
+		
+		//count--; // 강제 실패
+		
+		// 트랜잭션 제어 처리 
+		// 전체 삽입 성공 시 commit / 아니면 rollback(일부 삽입, 전체 실패)
+		if(count == userList.size()) {
+			commit(conn);
+		} else {
+			rollback(conn);
+		}
 		
 		close(conn);
 		
-		return result;
+		return count;
 	}
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }
