@@ -418,8 +418,6 @@ public class UserView {
 		}
 		
 	}
-
-
 	
 	
 }
