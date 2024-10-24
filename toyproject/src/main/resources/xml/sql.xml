@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	
+	<entry key="stdList">
+		SELECT
+			STD_NO,
+			STD_NAME,
+			STD_AGE,
+			DECODE(STD_GENDER, 'M', '남자', '여자') STD_GENDER,
+			STD_SCORE
+		FROM TB_STUDENT
+		ORDER BY STD_NO ASC
+	</entry>
+	
+	
+	<entry key="detailStd">
+		SELECT
+			STD_NO,
+			STD_NAME,
+			STD_AGE,
+			DECODE(STD_GENDER, 'M', '남자', '여자') STD_GENDER,
+			STD_SCORE
+		FROM TB_STUDENT
+		WHERE STD_NO = ?
+		ORDER BY STD_NO ASC
+	</entry>
+	
+</properties>

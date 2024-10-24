@@ -1,0 +1,56 @@
+.detail-card {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .info-label {
+            font-weight: 500;
+            color: #666;
+            min-width: 120px;
+        }
+        
+        .info-value {
+            font-weight: 500;
+            color: #333;
+        }
+        
+        .score-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 500;
+            font-size: 0.875rem;
+            min-width: 60px;
+            text-align: center;
+            display: inline-block;
+        }
+        
+        .score-A { background-color: #e8f5e9; color: #2e7d32; }
+        .score-B { background-color: #e3f2fd; color: #1976d2; }
+        .score-C { background-color: #fff3e0; color: #f57c00; }
+        .score-D { background-color: #fbe9e7; color: #d84315; }
+        .score-F { background-color: #ffebee; color: #c62828; }
+
+        .btn-action {
+            padding: 0.5rem 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+
+        .btn-action:hover {
+            transform: translateY(-1px);
+        }
+
+        .student-header {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .student-number {
+            color: #666;
+            font-size: 1.1rem;
+        }

@@ -55,8 +55,11 @@
 					<th>${todo.todoNo}</th> <%-- todoNo --%>
 
 					<td>
-						<%-- 제목 --%> 
-						<a href="">${todo.title}</a>
+						<%-- 제목 클릭시
+							 인데스 번호를 이용하여 todoList의
+							 인덱스 번재 요소 내용을 조회하기 
+						--%> 
+						<a href="/todo/detail?todoNo=${todo.todoNo}">${todo.title}</a>
 					</td>
 
 					<%-- 완료 여부 --%>
