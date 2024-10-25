@@ -105,4 +105,90 @@ public class StdDAOImpl implements StdDAO{
 		return std;
 	}
 
+
+	@Override
+	public int deleteStd(Connection conn, int stdNo) throws Exception {
+		
+		int result = 0;
+		
+		try {
+			String sql = prop.getProperty("deleteStd");
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, stdNo);
+			result = pstmt.executeUpdate();
+			
+			
+		} finally {
+			close(pstmt);
+		}
+		
+		return result;
+	}
+
+
+	@Override
+	public int insertStd(Connection conn, Student std) throws Exception {
+		
+		int result = 0;
+		
+		try {
+			String sql = """
+					INSERT INTO TB_STUDENT
+					VALUES(?, ?, ?, ?, ?)
+					""";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, std.getStdNo());
+			pstmt.setString(2, std.getStdName());
+			pstmt.setInt(3, std.getStdAge());
+			pstmt.setString(4, std.getStdGender());
+			pstmt.setString(5, std.getStdScore());
+			
+			result = pstmt.executeUpdate();
+			
+			
+		} finally {
+			close(pstmt);
+		}
+		
+		return result;
+	}
+
+
+	@Override
+	public int updateStd(Connection conn, Student std) throws Exception {
+		
+		int result = 0;
+		
+		try {
+			String sql = """
+					UPDATE TB_STUDENT
+					SET
+						STD_NAME = ?,
+						STD_AGE = ?,
+						STD_GENDER = ?,
+						STD_SCORE =?
+					WHERE STD_NO = ?
+					""";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, std.getStdName());
+			pstmt.setInt(2, std.getStdAge());
+			pstmt.setString(3, std.getStdGender());
+			pstmt.setString(4, std.getStdScore());
+			pstmt.setInt(5, std.getStdNo());
+			
+			result = pstmt.executeUpdate();
+			
+		} finally {
+			close(pstmt);
+		}
+		
+		return result;
+	}
+
 }

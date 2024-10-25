@@ -94,9 +94,7 @@ public class JDBCExample1 {
 			// -> JDBC 코드에서 SQL 작성 시
 			//    세미콜론(;) 을 작성하면 안된다!!
 			// -> "sql 명령어가 올바르게 종료되지 않았습니다" 예외 발생
-			String sql = "SELECT EMP_ID, "
-					+ "EMP_NAME, DEPT_CODE, JOB_CODE, SALARY, HIRE_DATE "
-					+ "FROM EMPLOYEE";
+			String sql = "SELECT * FROM EMPLOYEE";
 			
 			
 			/* 4. Statement 객체 생성 */

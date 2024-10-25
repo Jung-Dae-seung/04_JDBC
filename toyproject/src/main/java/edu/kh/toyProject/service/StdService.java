@@ -18,4 +18,25 @@ public interface StdService {
 	 */
 	Student detailStd(int stdNo) throws Exception;
 
+	/** 학생 삭제 서비스
+	 * @param stdNo
+	 * @return
+	 * @throws Exception
+	 */
+	int deleteStd(int stdNo) throws Exception;
+
+	/** 학생 등록 서비스
+	 * @param std
+	 * @return
+	 * @throws Exception
+	 */
+	int insertStd(Student std) throws Exception;
+
+	/** 학생 수정 서비스
+	 * @param std
+	 * @return
+	 * @throws Exception
+	 */
+	int updateStd(Student std) throws Exception;
+
 }

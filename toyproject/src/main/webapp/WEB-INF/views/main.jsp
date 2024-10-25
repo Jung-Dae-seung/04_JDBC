@@ -35,7 +35,7 @@
 			<div
 				class="card-header d-flex justify-content-between align-items-center">
 				<h2 class="mb-0 fs-4">학생 목록</h2>
-				<a href="<c:url value='/student/add'/>" class="btn btn-primary">
+				<a href="<c:url value='/student/insert'/>" class="btn btn-primary">
 					<i class="bi bi-plus-circle"></i> 학생 추가
 				</a>
 			</div>
@@ -60,7 +60,7 @@
 											${student.stdName} 
 										</a>
 									</td>
-									<td>${student.stdAge}</td>
+									<td>${student.stdAge}세</td>
 									<td>${student.stdGender}<td>
 										<span class="score-badge score-${student.stdScore}"> ${student.stdScore} </span>
 									</td>
@@ -83,5 +83,13 @@
 
 	<!-- Bootstrap Bundle with Popper -->
 	<script	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+	
+	<c:if test="${not empty sessionScope.message}">
+		<script>
+			alert("${message}");
+		</script>
+
+		<c:remove var="message" scope="session" />
+	</c:if>
 </body>
 </html>

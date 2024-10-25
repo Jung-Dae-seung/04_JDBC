@@ -37,4 +37,43 @@ public class StdServiceImpl implements StdService{
 		return std;
 	}
 
+	@Override
+	public int deleteStd(int stdNo) throws Exception {
+		
+		Connection conn = getConnection();
+		
+		int result = dao.deleteStd(conn, stdNo);
+		
+		if(result > 0) 	commit(conn);
+		else			rollback(conn);
+		
+		return result;
+	}
+
+	@Override
+	public int insertStd(Student std) throws Exception {
+		
+		Connection conn = getConnection();
+		
+		int result = dao.insertStd(conn, std);
+		
+		if(result > 0) 	commit(conn);
+		else			rollback(conn);
+		
+		return result;
+	}
+
+	@Override
+	public int updateStd(Student std) throws Exception {
+		
+		Connection conn = getConnection();
+		
+		int result = dao.updateStd(conn, std);
+		
+		if(result > 0) 	commit(conn);
+		else			rollback(conn);
+		
+		return result;
+	}
+
 }

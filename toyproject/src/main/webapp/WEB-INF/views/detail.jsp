@@ -27,7 +27,7 @@
 						<h1 class="fs-2 mb-0">${student.stdName}</h1>
 					</div>
 					<div class="d-flex gap-2">
-						<a href="<c:url value='/student/update/${student.stdNo}'/>" class="btn btn-primary btn-action"> 
+						<a href="<c:url value='/student/update?stdNo=${student.stdNo}'/>" class="btn btn-primary btn-action"> 
 							<i class="bi bi-pencil"></i>수정
 						</a>
 						<button type="button" class="btn btn-danger btn-action" onclick="confirmDelete(${student.stdNo})">
@@ -75,8 +75,8 @@
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary"
 						data-bs-dismiss="modal">취소</button>
-					<form action="<c:url value='/student/delete'/>" method="post" class="d-inline">
-						<input type="hidden" name="stdNo" id="deleteStdNo">
+					<form action="<c:url value='/student/delete?stdNo=?'/>" method="get" class="d-inline">
+						<input type="hidden" name="stdNo" id="stdNo">
 						<button type="submit" class="btn btn-danger">삭제</button>
 					</form>
 				</div>
